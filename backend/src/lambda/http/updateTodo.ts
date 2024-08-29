@@ -1,33 +1,30 @@
 import 'source-map-support/register'
 import { updateTodo } from "../../businessLogic/todos";
-import { createLogger } from "../../utils/logger";
 import { getUserId } from "../utils";
 
-const logger = createLogger('updateTodo');
 
 export const handler = async (event) => {
-  logger.info(`Update TODO: ${JSON.stringify(event)}`);
-  const todoId = event.pathParameters.todoId;
-  if (!todoId) {
+  const id = event.pathParameters.todoId;
+  if (!id) {
     return {
       statusCode: 400,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify('Missing TODO ID')
+      body: JSON.stringify('The todo item id is invalid')
     };
   }
 
-  const updatedTodo = JSON.parse(event.body);
-  if (!updatedTodo) {
+  const todoItem = JSON.parse(event.body);
+  if (!todoItem) {
     return {
       statusCode: 400,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify('Missing request')
+      body: JSON.stringify('The todo item is invalid')
     };
   }
 
@@ -39,11 +36,11 @@ export const handler = async (event) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify('Missing User ID')
+      body: JSON.stringify('The user id is invalid')
     };
   }
 
-  await updateTodo(userId, todoId, updatedTodo);
+  await updateTodo(userId, id, todoItem);
 
   return {
     statusCode: 204,

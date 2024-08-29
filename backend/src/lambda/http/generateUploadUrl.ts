@@ -1,23 +1,19 @@
 import 'source-map-support/register'
 import { generateUploadUrl, updateTodoAttachmentUrl } from "../../businessLogic/todos";
-import { createLogger } from "../../utils/logger";
 import { getUserId } from "../utils";
 import * as uuid from 'uuid'
 
-const logger = createLogger('generateUploadUrl');
 
 export const handler = async (event) => {
-  logger.info(`Generate upload URL: ${JSON.stringify(event)}`);
-
-  const todoId = event.pathParameters.todoId;
-  if (!todoId) {
+  const id = event.pathParameters.todoId;
+  if (!id) {
     return {
       statusCode: 400,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify('Missing TODO ID')
+      body: JSON.stringify('The todo item id is invalid')
     };
   }
 
@@ -29,15 +25,15 @@ export const handler = async (event) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify('Missing User ID')
+      body: JSON.stringify('The user id invalid')
     };
   }
 
   const attachmentId = uuid.v4();
 
-  const url = await generateUploadUrl(attachmentId);
+  const uploadUrl = await generateUploadUrl(attachmentId);
 
-  await updateTodoAttachmentUrl(userId, todoId, attachmentId);
+  await updateTodoAttachmentUrl(userId, id, attachmentId);
 
   return {
     statusCode: 200,
@@ -46,7 +42,7 @@ export const handler = async (event) => {
       'Access-Control-Allow-Credentials': true
     },
     body: JSON.stringify({
-      uploadUrl: url
+      uploadUrl: uploadUrl
     })
   }
 };

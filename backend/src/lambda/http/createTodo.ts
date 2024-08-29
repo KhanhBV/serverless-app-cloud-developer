@@ -1,22 +1,17 @@
 import 'source-map-support/register'
 import { createTodo } from "../../businessLogic/todos";
-import { createLogger } from "../../utils/logger";
 import { getUserId } from "../utils";
 
-const logger = createLogger('createTodo');
-
 export const handler = async (event) => {
-  logger.info(`Create TODO: ${JSON.stringify(event)}`);
-
-  const newTodo = JSON.parse(event.body);
-  if (!newTodo) {
+  const newItem = JSON.parse(event.body);
+  if (!newItem) {
     return {
       statusCode: 400,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify('Missing request')
+      body: JSON.stringify('The request is invalid ')
     };
   }
 
@@ -28,11 +23,11 @@ export const handler = async (event) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify('Missing User ID')
+      body: JSON.stringify('The UserId is invalid')
     };
   }
 
-  const newTodoItem = await createTodo(userId, newTodo);
+  const newTodoItem = await createTodo(userId, newItem);
 
   return {
     statusCode: 201,

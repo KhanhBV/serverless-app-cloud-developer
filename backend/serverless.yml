@@ -1,7 +1,7 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: tyhuynh99
+org: khanh74
 # "app" enables Serverless Framework Dashboard features and sharing them with other Services.
-app: tyhp-udacity-project-4
+app: serverless-app
 service: serverless-todo-app
 
 plugins:
@@ -23,22 +23,22 @@ provider:
   
   logs:
     restApi:
-      role: arn:aws:iam::043309350851:role/rest-api-cloudwatch-role
+      role: arn:aws:iam::166289770929:role/khanhbv-roles
 
   environment:
-    TODOS_TABLE: TodosTable-${self:provider.stage}
+    TODOS_TABLE: KhanhBVTodosTable-${self:provider.stage}
     TODOS_BY_USER_INDEX: TodosByUserIndex
     ATTACHMENT_S3_BUCKET: serverless-c4-todo-us117-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-    AUTH_JWKS_URL: 'https://dev-53fov3gggm5vx5dk.us.auth0.com/.well-known/jwks.json'
+    AUTH_JWKS_URL: 'https://dev-zoab2zchr24lev7y.us.auth0.com/.well-known/jwks.json'
 
 custom:
   documentation:
     api:
       info:
         version: '1.0.0'
-        title: My API
-        description: This is my API
+        title: KhanhBV API
+        description: This is Udacity project to create KhanhBV API
     models:
       - name: CreateTodoRequest
         contentType: "application/json"
@@ -49,7 +49,7 @@ custom:
           properties:
             name:
               type: string
-              minLength: 1
+              minLength: 2
             dueDate:
               type: string
               minLength: 10
@@ -249,7 +249,7 @@ resources:
     RequestBodyValidator:
       Type: 'AWS::ApiGateway::RequestValidator'
       Properties:
-        Name: 'request-body-validator'
+        Name: 'request-validator'
         RestApiId:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true

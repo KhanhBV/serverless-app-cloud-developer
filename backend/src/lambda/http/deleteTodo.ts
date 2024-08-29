@@ -1,22 +1,18 @@
 import 'source-map-support/register'
 import { deleteTodoItem } from "../../businessLogic/todos";
-import { createLogger } from "../../utils/logger";
 import { getUserId } from "../utils";
 
-const logger = createLogger('deleteTodo');
-
 export const handler = async (event) => {
-  logger.info(`Delete TODO: ${JSON.stringify(event)}`);
 
-  const todoId = event.pathParameters.todoId;
-  if (!todoId) {
+  const id = event.pathParameters.todoId;
+  if (!id) {
     return {
       statusCode: 400,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify('Missing TODO ID')
+      body: JSON.stringify('The todo item is invalid')
     };
   }
 
@@ -28,11 +24,11 @@ export const handler = async (event) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify('Missing User ID')
+      body: JSON.stringify('The userId is invalid')
     };
   }
 
-  await deleteTodoItem(userId, todoId);
+  await deleteTodoItem(userId, id);
 
   return {
     statusCode: 204,
